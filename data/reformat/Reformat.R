@@ -195,8 +195,6 @@ x$vessel[grep("britanny", tolower(x$vessel))] <- "Britanny Maddison"
 x <- x[, -grep("[.][lab]$", names(x))]
 x <- x[, -which(names(x) %in% c("eggs.dropped", "missing.legs.left", "missing.legs.right"))]
 
-# Compile location table:
-
 # Compile site table:
 x$location[x$location == "Baie Chaleurs"] <- "Baie des Chaleurs"
 x$location[x$location == "Banc  Bradelle"] <- "Bradelle Bank"
@@ -204,15 +202,12 @@ x$location[x$location == "Banc Bradelle"] <- "Bradelle Bank"
 x$location[x$location == "Banc Bradelle N"] <- "Bradelle Bank North"
 x$location[x$location == "chaleur 1"] <- "Baie des Chaleurs 1"
 x$location[x$location == "chaleur 2"] <- "Baie des Chaleurs 2"
-
 x$location[x$location == "MARGAREE CAGE"] <- "Margaree"    
 x$location[x$location == "MARGAREE TRAP"] <- "Margaree"  
 x$location[x$location == "MARGAREE TRAPS"] <- "Margaree"
-           
 x$location[x$location == "CHETICAMP CAGE"] <- "Cheticamp"    
 x$location[x$location == "CHETICAMP TRAP"] <- "Cheticamp"  
 x$location[x$location == "CHETICAMP TRAPS"] <- "Cheticamp"
-
 x$location[x$location == "GRANDE RIVIERE"] <- "Grande Riviere"
 x$location <- gsub("LOUISBOURG", "Louisbourg", x$location)
 x$location <- gsub("FOURCHU", "Fourchu", x$location)
@@ -224,4 +219,9 @@ x$gonad.weight[x$gonad.weight == "na"] <- ""
 x$gonad.weight[x$gonad.weight == "5..2726"] <- "5.2726"
 x$gonad.weight <- gsub("[*]", "", x$gonad.weight)
 x$gonad.weight <- as.numeric(x$gonad.weight)
+
+# Compile study table:
+
+# Compile site table:
+
 
