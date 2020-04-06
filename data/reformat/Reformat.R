@@ -1,6 +1,6 @@
-
-x <- read.csv(file = "/Users/crustacean/Desktop/2019 SNOW CRAB FECUNDITY DATA MASTER (6).csv", 
-                 stringsAsFactors = FALSE)
+# Reformat and correct snow crab fecundity data:
+file <- "https://raw.github.com/TobieSurette/Snow-Crab/master/Fecundity/data/raw/Snow%20crab%20fecundity%20data%201989-2017.csv"
+x <- read.csv(file, stringsAsFactors = FALSE)
 names(x) <- tolower(names(data))
 
 # Parse data field names:
@@ -11,13 +11,14 @@ fields <- gsub("#", "", fields)
 fields[fields == "lat"] <- "latitude"
 fields[fields == "long"] <- "longitude"
 fields[fields == "secteur"] <- "sector"
+fields[fields == "condition"] <- "shell.condition"
 
-names(x) < fields
+# Update column names:
+names(x) <- fields
 
 # Reformat missing legs field:
 x$missing.legs.left <- toupper(gsub("[; .]", "", x$missing.legs.left))
 x$missing.legs.right <- toupper(gsub("[; .]", "", x$missing.legs.right))
-
 x$missing.legs.left <- gsub("D", "H", x$missing.legs.left)
 x$missing.legs.right <- gsub("D", "H", x$missing.legs.right)
 
@@ -66,31 +67,66 @@ x$sample.egg.count[grep("Lost", x$sample.egg.count)] <- ""
 x$sample.egg.count[grep("na", x$sample.egg.count)] <- ""
 x$sample.egg.count[grep("drop", x$sample.egg.count)] <- ""
 x$sample.egg.count <- as.numeric(x$sample.egg.count)
+index <- which(x$year == 2001 & x$sample.egg.count < 200)
+x$sample.egg.count[index] <- NA
+x$sample.egg.weight[index] <- NA
+
+# Correct eggs remaining:
+x$eggs.remaining[which((x$year == 2013) & (x$eggs.remaining == "none"))] <- ""
+x$eggs.remaining[which(x$eggs.remaining == "3 (70%)")] <- "70%"
+x$eggs.remaining[which(x$eggs.remaining == "3 (80%)")] <- "80%"
+x$eggs.remaining[which(x$eggs.remaining == "3 (85%)")] <- "85%"
+x$eggs.remaining[which(x$eggs.remaining == "3 (90%)")] <- "90%"
+x$eggs.remaining[which(x$eggs.remaining == "3 (95%)")] <- "95%"
+x$eggs.remaining[which(x$eggs.remaining == "4 (85%)")] <- "85%"
+x$eggs.remaining[which(x$eggs.remaining == "4 (90%)")] <- "90%"
+x$eggs.remaining[which(x$eggs.remaining == "4 (95%)")] <- "95%"
+x$eggs.remaining[which(x$eggs.remaining == "100+")] <- "100%"
+x$eggs.remaining[which(x$eggs.remaining == "<26")] <- "1-25%"
+index <- which(x$eggs.remaining %in% as.character(5 * (1:20)))
+x$eggs.remaining[index] <- paste0(x$eggs.remaining[index], "%")
+x$eggs.remaining[which(x$eggs.remaining == "4+")] <- "4"
+x$eggs.remaining[which(x$eggs.remaining == "4")] <- "100%"
+x$eggs.remaining[which(x$eggs.remaining == "3")] <- "75-99%"
+x$eggs.remaining[which(x$eggs.remaining == "2")] <- "50-74%"
+x$eggs.remaining[which(x$eggs.remaining == "1")] <- "1-49%"
+x$eggs.remaining[which(x$eggs.remaining == "0")] <- "0%"
+x$eggs.remaining[which(x$eggs.remaining == "*")] <- "" 
+x$eggs.remaining[which(x$eggs.remaining == "NONE" & x$year == 2013)] <- "0%" 
+
+# Reformat sample egg weight and extract egg comments:
+index <- which(gsub("[0-9E.-]", "", x$sample.egg.weight) != "")
+x$egg.comment <- ""
+x$egg.comment[index] <- x$sample.egg.weight[index]
+x$sample.egg.weight[index] <- ""
+
+# Egg comment corrections:
+index <- grep("echap", tolower(x$egg.comment))
+x$egg.comment[index] <- "dropped"
+index <- grep("drop", tolower(x$egg.comment))
+x$egg.comment[index] <- "Dropped"
+x$egg.comment[x$egg.comment == "na"] <- ""
+x$egg.comment <- gsub("*", "", x$egg.comment, fixed = TRUE)
+x$egg.comment <- gsub("^ +", "", x$egg.comment)
+x$egg.comment <- gsub(" $", "", x$egg.comment)
+index <- which(x$eggs.dropped != "")
+x$egg.comment[index] <- x$eggs.dropped[index]
+
+fields[fields == "secteur"] <- "sector"
+
+# Update parasite field:
+index <- grep("parasite", tolower(x$egg.comment))
+x$parasite[index] <- "Parasite infested"
 
 # Reformat total egg weight:
 x$total.egg.weight[gsub("[0-9.]", "", x$total.egg.weight) != ""] <- ""
 x$total.egg.weight <- as.numeric(x$total.egg.weight)
 plot(x$total.egg.weight, ylim = c(0, 8))
 
-# Reformat sample egg weight and extract egg comments:
-index <- gsub("[0-9E.-]", "", x$sample.egg.weight) != "" 
-x$egg.comment <- ""
-x$egg.comment[index] <- x$sample.egg.weight[index]
-x$sample.egg.weight[index] <- ""
-x$egg.comment[x$egg.comment == "na"] <- ""
-x$egg.comment <- gsub("*", "", x$egg.comment, fixed = TRUE)
-x$egg.comment <- gsub("^ +", "", x$egg.comment)
-x$egg.comment <- gsub(" $", "", x$egg.comment)
-x$sample.egg.weight[x$sample.egg.weight == "-"] <- ""
-x$sample.egg.weight <- as.numeric(x$sample.egg.weight)
-# There are a lot of numerical errors in this field.
-
-# Spot fixes for latitude:
+# Latitude and longitude corrections:
 x$latitude <- gsub("48.02", "4802", x$latitude)
 x$latitude[x$latitude == "47\xf850.612"] <- "4750.612"
 x$latitude <- as.numeric(x$latitude) 
-
-# Convert to decimal degree format:
 x$longitude <- as.numeric(substr(x$longitude, 1, 2)) + 
                as.numeric(substr(x$longitude, 3, 4)) / 60 + 
                + (x$longitude - floor(x$longitude)) / 3600
@@ -106,8 +142,6 @@ x$gonad.color[x$gonad.color == "*"] <- ""
 x$gonad.color[x$gonad.color == "NONE"] <- ""
 x$gonad.color[x$gonad.color == "BEI"] <- "BEIGE"
 x$gonad.color <- gsub("[;*_ ]", "", x$gonad.color)
-
-
 x$gonad.color[x$gonad.color == "BE-O"] <- "BEIGE-ORANGE"  
 x$gonad.color[x$gonad.color == "BL"]   <- "WHITE"
 x$gonad.color[x$gonad.color == "W"]    <- "WHITE"
@@ -119,6 +153,79 @@ x$gonad.color[x$gonad.color == "OC"]   <- "LIGHT ORANGE"
 x$gonad.color[x$gonad.color == "OF"]   <- "DARK ORANGE"
 x$gonad.color[which((x$gonad.color == "B") & !is.na(x$total.egg.weight))] <- "BEIGE"
 
-#B
+# Shell condition corrections:
+x$shell.condition <- toupper(x$shell.condition)
+x$shell.condition <- gsub(" ", "", x$shell.condition)
+x$shell.condition <- gsub("[*]", "", x$shell.condition)
+x$shell.condition[x$shell.condition %in% c("2.5")] <- "2M" 
+x$shell.condition[x$shell.condition %in% c("3.5", "3+", "3;4")] <- "3M" 
+
+# Reproductive status corrections:
+x$reproductive.status <- toupper(x$reproductive.status)
+
+
+# Temporary data fix:
+x <- x[-which(duplicated(x[vars])), ]
+
+
+# Reformat colour variables:
+vars <- c("hep.l", "hep.a", "hep.b", "gon.l", "gon.a", "gon.b", "egg.l", "egg.a", "egg.b")
+for (i in 1:length(vars)) x[, vars[i]] <- gsub("[*]", "", x[, vars[i]])
+for (i in 1:length(vars)) x[, vars[i]] <- as.numeric(x[, vars[i]])
+
+
+# Compile colorimeter data table:
+vars <- c("year", "month", "day", "crab.number", "station", "location")
+body.part <- c("gonad", "eggs", "hepato-pancreas")
+r <- NULL
+
+for (i in 1:nrow(x)){
+   for (j in 1:length(body.part)){
+      tmp <- x[i, paste0(substr(body.part[j], 1, 3), ".", c("l", "a", "b"))]
+      if (!any(is.na(tmp))){
+         r <- rbind(r, cbind(x[i, vars], data.frame(body.part = body.part[j], L = tmp[,1], a = tmp[,2], b = tmp[,3])))
+      }
+   }
+}
+
+# Correct sampling vessel:
+x$vessel[grep("perley", tolower(x$vessel))]   <- "CCGS Perley"
+x$vessel[grep("opilio", tolower(x$vessel))]   <- "CCGS Opilio"
+x$vessel[grep("thinking", tolower(x$vessel))] <- "Fishfull Thinking"
+x$vessel[grep("marco", tolower(x$vessel))]    <- "Marco-Michel"
+x$vessel[grep("britanny", tolower(x$vessel))] <- "Britanny Maddison"
+
+# Remove redundant fields:
+x <- x[, -grep("[.][lab]$", names(x))]
+x <- x[, -which(names(x) %in% c("eggs.dropped", "missing.legs.left", "missing.legs.right"))]
+
+# Compile location table:
+
+# Compile site table:
+x$location[x$location == "Baie Chaleurs"] <- "Baie des Chaleurs"
+x$location[x$location == "Banc  Bradelle"] <- "Bradelle Bank"
+x$location[x$location == "Banc Bradelle"] <- "Bradelle Bank"
+x$location[x$location == "Banc Bradelle N"] <- "Bradelle Bank North"
+x$location[x$location == "chaleur 1"] <- "Baie des Chaleurs 1"
+x$location[x$location == "chaleur 2"] <- "Baie des Chaleurs 2"
+
+x$location[x$location == "MARGAREE CAGE"] <- "Margaree"    
+x$location[x$location == "MARGAREE TRAP"] <- "Margaree"  
+x$location[x$location == "MARGAREE TRAPS"] <- "Margaree"
+           
+x$location[x$location == "CHETICAMP CAGE"] <- "Cheticamp"    
+x$location[x$location == "CHETICAMP TRAP"] <- "Cheticamp"  
+x$location[x$location == "CHETICAMP TRAPS"] <- "Cheticamp"
+
+x$location[x$location == "GRANDE RIVIERE"] <- "Grande Riviere"
+x$location <- gsub("LOUISBOURG", "Louisbourg", x$location)
+x$location <- gsub("FOURCHU", "Fourchu", x$location)
+x$location <- gsub("^GP ", "GP", x$location)
+x$location <- gsub("; ", "-", x$location)
+
+
+
+
+
 
 
