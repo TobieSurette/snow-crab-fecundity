@@ -1,5 +1,5 @@
 # Reformat and correct snow crab fecundity data:
-file <- "https://raw.github.com/TobieSurette/Snow-Crab/master/Fecundity/data/raw/Snow%20crab%20fecundity%20data%201989-2017.csv"
+file <- "https://raw.github.com/TobieSurette/snow-crab-fecundity/master/data/raw/Fecundity%20data%201989-2017.csv"
 x <- read.csv(file, stringsAsFactors = FALSE)
 names(x) <- tolower(names(data))
 
@@ -121,7 +121,6 @@ x$parasite[index] <- "Parasite infested"
 # Reformat total egg weight:
 x$total.egg.weight[gsub("[0-9.]", "", x$total.egg.weight) != ""] <- ""
 x$total.egg.weight <- as.numeric(x$total.egg.weight)
-plot(x$total.egg.weight, ylim = c(0, 8))
 
 # Latitude and longitude corrections:
 x$latitude <- gsub("48.02", "4802", x$latitude)
@@ -163,19 +162,16 @@ x$shell.condition[x$shell.condition %in% c("3.5", "3+", "3;4")] <- "3M"
 # Reproductive status corrections:
 x$reproductive.status <- toupper(x$reproductive.status)
 
-
-# Temporary data fix:
-x <- x[-which(duplicated(x[vars])), ]
-
-
 # Reformat colour variables:
 vars <- c("hep.l", "hep.a", "hep.b", "gon.l", "gon.a", "gon.b", "egg.l", "egg.a", "egg.b")
 for (i in 1:length(vars)) x[, vars[i]] <- gsub("[*]", "", x[, vars[i]])
 for (i in 1:length(vars)) x[, vars[i]] <- as.numeric(x[, vars[i]])
 
+# Remove data rows with duplicate :
+vars <- c("year", "month", "day", "crab.number", "station", "location")
+x <- x[-which(duplicated(x[vars])), ]
 
 # Compile colorimeter data table:
-vars <- c("year", "month", "day", "crab.number", "station", "location")
 body.part <- c("gonad", "eggs", "hepato-pancreas")
 r <- NULL
 
@@ -223,9 +219,9 @@ x$location <- gsub("FOURCHU", "Fourchu", x$location)
 x$location <- gsub("^GP ", "GP", x$location)
 x$location <- gsub("; ", "-", x$location)
 
-
-
-
-
-
+# Correct gonad weight:
+x$gonad.weight[x$gonad.weight == "na"] <- ""
+x$gonad.weight[x$gonad.weight == "5..2726"] <- "5.2726"
+x$gonad.weight <- gsub("[*]", "", x$gonad.weight)
+x$gonad.weight <- as.numeric(x$gonad.weight)
 
