@@ -20,6 +20,7 @@ fields[fields == "hep.vis"]           <- "hepato.visual"
 fields[fields == "eggs.vis"]          <- "egg.visual"
 fields[fields == "gon.vis"]           <- "gonad.visual"
 fields[fields == "proteines"]         <- "proteins" 
+fields[fields == "secteur"]           <- "sector"
 
 # Update column names:
 names(x) <- fields
@@ -121,7 +122,7 @@ x$egg.comment <- gsub(" $", "", x$egg.comment)
 index <- which(x$eggs.dropped != "")
 x$egg.comment[index] <- x$eggs.dropped[index]
 
-fields[fields == "secteur"] <- "sector"
+
 
 # Update parasite field:
 index <- grep("parasite", tolower(x$egg.comment))
@@ -286,7 +287,11 @@ x$egg.color[x$egg.color == "OC"] <- "LIGHT ORANGE"
 x$egg.color[x$egg.color == "BR"] <- "BROWN"
 
 # Compile study table:
+vars <- c("year", "month", "day", "project", "location", "gear", 'vessel') 
+res <- aggregate(x["tow.number"], by = x[vars], unique)
+
+write.csv(x, file = "data/biological.csv", row.names = FALSE)
+write.csv(r, file = "data/colorimeter.csv", row.names = FALSE)
+write.csv(res, file = "data/sites.csv", row.names = FALSE)
 
 # Compile site table:
-
-
