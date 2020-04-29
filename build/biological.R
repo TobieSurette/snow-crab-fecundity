@@ -1,5 +1,5 @@
 # Reformat and correct snow crab fecundity data:
-x <- read.csv("data/raw/Fecundity data 1989-2017.csv", header = TRUE, stringsAsFactors = FALSE)
+x <- read.csv("data/raw/Fecundity data 1989-2017.csv", header = TRUE, stringsAsFactors = FALSE, fileEncoding = "Windows-1252")
 names(x) <- tolower(names(x))
 
 # Parse data field names:
@@ -7,10 +7,19 @@ fields <- names(x)
 fields <- gsub("^ ", "", fields)
 fields <- gsub(" ", ".", fields)
 fields <- gsub("#", "", fields)
-fields[fields == "lat"] <- "latitude"
-fields[fields == "long"] <- "longitude"
-fields[fields == "secteur"] <- "sector"
-fields[fields == "condition"] <- "shell.condition"
+fields[fields == "lat"]               <- "latitude"
+fields[fields == "long"]              <- "longitude"
+fields[fields == "secteur"]           <- "sector"
+fields[fields == "condition"]         <- "shell.condition"
+fields[fields == "sample.egg.weight"] <- "egg.sample.weight"
+fields[fields == "sample.egg.count"]  <- "egg.sample.number"
+fields[fields == "total.egg.weight"]  <- "egg.total.weight"
+fields[fields == "total.egg.count"]   <- "egg.total.number"
+fields[fields == "poids.hepato"]      <- "hepato.weight"
+fields[fields == "hep.vis"]           <- "hepato.visual"
+fields[fields == "eggs.vis"]          <- "egg.visual"
+fields[fields == "gon.vis"]           <- "gonad.visual"
+fields[fields == "proteines"]         <- "proteins" 
 
 # Update column names:
 names(x) <- fields
@@ -51,28 +60,25 @@ x$missing.legs.right[x$missing.legs.right == "" & x$missing.legs.left != ""] <- 
 x$missing.legs.left[x$missing.legs.right != "" & x$missing.legs.left == ""] <- "xxxxx"
 x$missing.legs <- paste0(x$missing.legs.left, x$missing.legs.right)
 
-# Reformat total egg count:
-x$total.egg.count <- gsub(",", "", x$total.egg.count)
-x$total.egg.count[grep("DIV", x$total.egg.count)] <- ""
-x$total.egg.count[grep("echa", x$total.egg.count)] <- ""
-x$total.egg.count[grep("REF", x$total.egg.count)] <- ""
-x$total.egg.count[grep("VALUE", x$total.egg.count)] <- ""
-x$total.egg.count <- as.numeric(x$total.egg.count)
-x$total.egg.count[which(x$total.egg.count == 0)] <- NA
+# Reformat total egg number:
+x$egg.total.number <- gsub(",", "", x$egg.total.number)
+x$egg.total.number[grep("DIV", x$egg.total.number)] <- ""
+x$egg.total.number[grep("echa", x$egg.total.number)] <- ""
+x$egg.total.number[grep("REF", x$egg.total.number)] <- ""
+x$egg.total.number[grep("VALUE", x$egg.total.number)] <- ""
+x$egg.total.number <- as.numeric(x$egg.total.number)
+x$egg.total.number[which(x$egg.total.number == 0)] <- NA
 
-x$month[x$project == "Survey"]
-
-
-# Reformat sample egg count:
-x$sample.egg.count[grep("0.035", x$sample.egg.count)] <- ""
-x$sample.egg.count[grep("echa", x$sample.egg.count)] <- ""
-x$sample.egg.count[grep("Lost", x$sample.egg.count)] <- ""
-x$sample.egg.count[grep("na", x$sample.egg.count)] <- ""
-x$sample.egg.count[grep("drop", x$sample.egg.count)] <- ""
-x$sample.egg.count <- as.numeric(x$sample.egg.count)
-index <- which(x$year == 2001 & x$sample.egg.count < 200)
-x$sample.egg.count[index] <- NA
-x$sample.egg.weight[index] <- NA
+# Reformat sample egg number:
+x$egg.sample.number[grep("0.035", x$egg.sample.number)] <- ""
+x$egg.sample.number[grep("echa", x$egg.sample.number)] <- ""
+x$egg.sample.number[grep("Lost", x$egg.sample.number)] <- ""
+x$egg.sample.number[grep("na", x$egg.sample.number)] <- ""
+x$egg.sample.number[grep("drop", x$egg.sample.number)] <- ""
+x$egg.sample.number <- as.numeric(x$egg.sample.number)
+index <- which(x$year == 2001 & x$egg.sample.number < 200)
+x$egg.sample.number[index] <- NA
+x$egg.sample.weight[index] <- NA
 
 # Correct eggs remaining:
 x$eggs.remaining[which((x$year == 2013) & (x$eggs.remaining == "none"))] <- ""
@@ -98,10 +104,10 @@ x$eggs.remaining[which(x$eggs.remaining == "*")] <- ""
 x$eggs.remaining[which(x$eggs.remaining == "NONE" & x$year == 2013)] <- "0%" 
 
 # Reformat sample egg weight and extract egg comments:
-index <- which(gsub("[0-9E.-]", "", x$sample.egg.weight) != "")
+index <- which(gsub("[0-9E.-]", "", x$egg.sample.weight) != "")
 x$egg.comment <- ""
-x$egg.comment[index] <- x$sample.egg.weight[index]
-x$sample.egg.weight[index] <- ""
+x$egg.comment[index] <- x$egg.sample.weight[index]
+x$egg.sample.weight[index] <- ""
 
 # Egg comment corrections:
 index <- grep("echap", tolower(x$egg.comment))
@@ -120,10 +126,11 @@ fields[fields == "secteur"] <- "sector"
 # Update parasite field:
 index <- grep("parasite", tolower(x$egg.comment))
 x$parasite[index] <- "Parasite infested"
+x$parasite[is.na(x$parasite)] <- ""
 
 # Reformat total egg weight:
-x$total.egg.weight[gsub("[0-9.]", "", x$total.egg.weight) != ""] <- ""
-x$total.egg.weight <- as.numeric(x$total.egg.weight)
+x$egg.total.weight[gsub("[0-9.]", "", x$egg.total.weight) != ""] <- ""
+x$egg.total.weight <- as.numeric(x$egg.total.weight)
 
 # Latitude and longitude corrections:
 x$latitude <- gsub("48.02", "4802", x$latitude)
@@ -150,9 +157,9 @@ x$gonad.color[x$gonad.color == "W"]    <- "WHITE"
 x$gonad.color[x$gonad.color == "BE"]   <- "BEIGE"
 x$gonad.color[x$gonad.color == "O"]    <- "ORANGE" 
 x$gonad.color[x$gonad.color == "OB"]   <- "BEIGE-ORANGE"
-x$gonad.color[x$gonad.color == "BO"]   <- "BEIGE-ORANGE" 
+x$gonad.color[x$gonad.color == "BO"]   <- "BEIGE" # "BEIGE-ORANGE" 
 x$gonad.color[x$gonad.color == "OC"]   <- "LIGHT ORANGE"
-x$gonad.color[x$gonad.color == "OF"]   <- "DARK ORANGE"
+x$gonad.color[x$gonad.color == "OF"]   <- "ORANGE" # "DARK ORANGE"
 x$gonad.color[which((x$gonad.color == "B") & !is.na(x$total.egg.weight))] <- "BEIGE"
 
 # Shell condition corrections:
@@ -215,7 +222,7 @@ for (i in 1:nrow(x)){
 
 # Remove redundant fields:
 x <- x[, -grep("[.][lab]$", names(x))]
-x <- x[, -which(names(x) %in% c("eggs.dropped", "missing.legs.left", "missing.legs.right"))]
+x <- x[, -which(names(x) %in% c("eggs.dropped", "missing.legs.left", "missing.legs.right", "eggs.valid"))]
 
 # Correct gonad weight:
 x$gonad.weight[x$gonad.weight == "na"] <- ""
@@ -227,20 +234,56 @@ x$gonad.weight <- as.numeric(x$gonad.weight)
 x$reproductive.status[x$reproductive.status == "M;"] <- "M"
 x$reproductive.status[x$reproductive.status == "M1;P2"] <- "M1"
 
-"year",	"month", "day",	"project",	"location", "gear", "vessel",	"tow.number", "station", "crab.number"
+x$project[x$project == "June Survey"] <- "June survey"
+x$project[x$project == "Suvey"] <- "Survey"
 
-preservation	zone	latitude	longitude	sector
+x$gear[x$gear == "" & !is.na(x$tow.number)] <- "Trawl"
+x$gear <- tolower(x$gear)
+x$preservation <- tolower(x$preservation)
 
-shell.condition	reproductive.status	carapace.width	abdomen.width	weight
-egg.color	gonad.color	gonad.weight	eggs.remaining	sample.egg.weight	sample.egg.count
-total.egg.weight	total.egg.count
-spermatheca.weight	spermatheca.volume	sperm.square.count	sperm.sample.volume	sperm.sample.count sperm.color	spermatheca.sperm	
-egg.development	egg.comment	parasite	eggs.valid	comment	poids.hepato
-sperm.points.noires	proteines	eggs.vis	gon.vis	hep.vis	missing.legs
+# Correct abdomen width:
+x$abdomen.width[x$abdomen.width == "35;74"] <- 35.74
+x$abdomen.width <- as.numeric(x$abdomen.width)
+x$abdomen.width[x$abdomen.width == 0] <- NA
+x$abdomen.width[x$abdomen.width > 90] <- NA
 
+# Correct carapace width:
+x$carapace.width[x$carapace.width >= 100] <- NA
 
+# Remove "*"s in character fields:
+for (i in 1:ncol(x)){
+   if (is.character(x[, i])){
+      x[, i] <- gsub("[*]+", "*", x[, i])
+      x[which(toupper(x[, i]) %in% c("*", "-", "?", "NA", "REF!", "VALUE!", "DIV;0!")), i] <- ""
+   }
+}
 
+# Correct general comments:
+x$comment <- gsub("_ufs", "oeufs", x$comment)
+x$comment <- gsub(";+", ";", x$comment) 
+x$comment[grep("gonade sous-developpee", x$comment, fixed = TRUE)] <- "cote gauche de gonade sous-developpee"
 
+# Re-order variables:
+vars <- c('year','month','day', 'project', 'zone', 'sector', 'location', 'station', 'tow.number', 'latitude', 'longitude', 'gear', 'vessel',
+          'preservation', 'crab.number', 'sex', 'carapace.width', 'abdomen.width', 'weight', 'shell.condition', 'reproductive.status', 'missing.legs',
+          'egg.color', 'eggs.remaining', 'egg.sample.weight', 'egg.sample.number', 'egg.total.weight', 'egg.total.number', 'egg.development', 'egg.visual', 
+          'parasite', 'gonad.weight', 'gonad.color', 'gonad.visual', 
+          'spermatheca.weight', 'spermatheca.volume', 'sperm.square.count', 'sperm.sample.volume', 'sperm.sample.count', 'sperm.color', 'spermatheca.sperm', 
+          'sperm.points.noires', 'hepato.weight', 'hepato.visual', 'proteins', 'comment', 'egg.comment')
+x <- x[vars]
+
+# Correct egg colour:
+x$egg.color <- toupper(x$egg.color)
+x$egg.color <- gsub(" ", "", x$egg.color)
+x$egg.color[x$egg.color %in% c("OF+BR", "FO")] <- "OF"
+x$egg.color[x$egg.color %in% c("NONE", "DEAD", "R")] <- ""
+x$egg.color[x$egg.color == "OC+OF(15%)"] <- "OC"
+x$egg.color[x$egg.color == "BRUN"] <- "BR"
+x$egg.color[x$egg.color %in% c("OFQQE", "QQEOF", "OP")] <- "OC"
+x$egg.color[x$egg.color == "O"] <- "ORANGE"
+x$egg.color[x$egg.color == "OF"] <- "DARK ORANGE"
+x$egg.color[x$egg.color == "OC"] <- "LIGHT ORANGE"
+x$egg.color[x$egg.color == "BR"] <- "BROWN"
 
 # Compile study table:
 
