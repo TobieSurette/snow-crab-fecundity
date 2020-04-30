@@ -156,6 +156,7 @@ x$gonad.color[x$gonad.color == "BE-O"] <- "BEIGE-ORANGE"
 x$gonad.color[x$gonad.color == "BL"]   <- "WHITE"
 x$gonad.color[x$gonad.color == "W"]    <- "WHITE"
 x$gonad.color[x$gonad.color == "BE"]   <- "BEIGE"
+x$gonad.color[x$gonad.color == "B"]    <- "BEIGE"
 x$gonad.color[x$gonad.color == "O"]    <- "ORANGE" 
 x$gonad.color[x$gonad.color == "OB"]   <- "BEIGE-ORANGE"
 x$gonad.color[x$gonad.color == "BO"]   <- "BEIGE" # "BEIGE-ORANGE" 
@@ -205,7 +206,8 @@ x$location[x$location == "CHETICAMP TRAP"] <- "Cheticamp"
 x$location[x$location == "CHETICAMP TRAPS"] <- "Cheticamp"
 x$location[x$location == "GRANDE RIVIERE"] <- "Grande Riviere"
 x$location <- gsub("LOUISBOURG", "Louisbourg", x$location)
-x$location <- gsub("FOURCHU", "Fourchu", x$location)
+x$location <- gsub("FOURCHU", "", x$location)
+x$location <- gsub("^;", "", x$location)
 x$location <- gsub("^GP ", "GP", x$location)
 x$location <- gsub("; ", "-", x$location)
 
@@ -251,7 +253,7 @@ x$abdomen.width[x$abdomen.width > 90] <- NA
 # Correct carapace width:
 x$carapace.width[x$carapace.width >= 100] <- NA
 
-# Remove "*"s in character fields:
+# Remove crap in character fields:
 for (i in 1:ncol(x)){
    if (is.character(x[, i])){
       x[, i] <- gsub("[*]+", "*", x[, i])
@@ -264,15 +266,6 @@ x$comment <- gsub("_ufs", "oeufs", x$comment)
 x$comment <- gsub(";+", ";", x$comment) 
 x$comment[grep("gonade sous-developpee", x$comment, fixed = TRUE)] <- "cote gauche de gonade sous-developpee"
 
-# Re-order variables:
-vars <- c('year','month','day', 'project', 'zone', 'sector', 'location', 'station', 'tow.number', 'latitude', 'longitude', 'gear', 'vessel',
-          'preservation', 'crab.number', 'sex', 'carapace.width', 'abdomen.width', 'weight', 'shell.condition', 'reproductive.status', 'missing.legs',
-          'egg.color', 'eggs.remaining', 'egg.sample.weight', 'egg.sample.number', 'egg.total.weight', 'egg.total.number', 'egg.development', 'egg.visual', 
-          'parasite', 'gonad.weight', 'gonad.color', 'gonad.visual', 
-          'spermatheca.weight', 'spermatheca.volume', 'sperm.square.count', 'sperm.sample.volume', 'sperm.sample.count', 'sperm.color', 'spermatheca.sperm', 
-          'sperm.points.noires', 'hepato.weight', 'hepato.visual', 'proteins', 'comment', 'egg.comment')
-x <- x[vars]
-
 # Correct egg colour:
 x$egg.color <- toupper(x$egg.color)
 x$egg.color <- gsub(" ", "", x$egg.color)
@@ -281,17 +274,60 @@ x$egg.color[x$egg.color %in% c("NONE", "DEAD", "R")] <- ""
 x$egg.color[x$egg.color == "OC+OF(15%)"] <- "OC"
 x$egg.color[x$egg.color == "BRUN"] <- "BR"
 x$egg.color[x$egg.color %in% c("OFQQE", "QQEOF", "OP")] <- "OC"
-x$egg.color[x$egg.color == "O"] <- "ORANGE"
+x$egg.color[x$egg.color == "O"]  <- "ORANGE"
 x$egg.color[x$egg.color == "OF"] <- "DARK ORANGE"
 x$egg.color[x$egg.color == "OC"] <- "LIGHT ORANGE"
 x$egg.color[x$egg.color == "BR"] <- "BROWN"
 
+# Correct hepato visual:
+hepato.color <- data.frame(code = c(as.character(1:14), c("cm", "m", "dm")),
+                           description = c("Brown", "Watery brown", "Dark brown-black", "Brown blackish greenish", "Light brown", 
+                                           "Watery light brown", "Brown-pinkish", "Dark brown", "Watery dark brown", "Brown-reddish", 
+                                           "Dark green/greenish", "Watery green/greenish", "Reddish",	"Yellowish", "Clear maroon", "Maroon", "Dark maroon"),
+                           stringsAsFactors = FALSE)
+x$hepato.color <- hepato.color$description[match(x$hepato.vis, hepato.color$code)]
+x$hepato.color[is.na(x$hepato.color)] <- ""
+
+# Drop visual in favour of gonad =.color
+x$gonad.visual <- toupper(c("white", "beige", "orange")[as.numeric(x$gonad.visual)])
+x$gonad.visual[is.na(x$gonad.visual)] <- ""
+index <- which((x$gonad.color == "") & (x$gonad.visual != ""))
+x$gonad.color[index] <- x$gonad.visual[index]
+
+x$egg.visual <- toupper(c("white", "beige", "orange")[as.numeric(x$egg.visual)])
+x$gonad.visual[is.na(x$gonad.visual)] <- ""
+index <- which((x$gonad.color == "") & (x$gonad.visual != ""))
+x$gonad.color[index] <- x$gonad.visual[index]
+
+x$egg.visual <- toupper(c("light orange", "dark orange", "black", "cocoon")[as.numeric(x$egg.visual)])
+x$egg.visual[is.na(x$egg.visual)] <- ""
+index <- which((x$egg.color == "") & (x$egg.visual != ""))
+x$egg.color[index] <- x$egg.visual[index]
+index <- which(x$egg.color %in% as.character(1:3))
+x$egg.color[index] <- toupper(c("light orange", "dark orange", "black", "cocoon")[as.numeric(x$egg.color[index])]) 
+x$egg.color[x$egg.color == "BROWN"] <- "BLACK"
+
+# Drop visual variables:
+x <- x[, -which(names(x) %in% c("egg.visual", "gonad.visual", "hepato.visual"))]
+
+# Re-order variables:
+vars <- c('year','month','day', 'project', 'zone', 'sector', 'location', 'station', 'tow.number', 'latitude', 'longitude', 'gear', 'vessel',
+          'preservation', 'crab.number', 'sex', 'carapace.width', 'abdomen.width', 'weight', 'shell.condition', 'reproductive.status', 'missing.legs',
+          'egg.color', 'eggs.remaining', 'egg.sample.weight', 'egg.sample.number', 'egg.total.weight', 'egg.total.number', 'egg.development',
+          'parasite', 'gonad.weight', 'gonad.color', 
+          'spermatheca.weight', 'spermatheca.volume', 'sperm.square.count', 'sperm.sample.volume', 'sperm.sample.count', 'sperm.color', 'spermatheca.sperm', 
+          'sperm.points.noires', 'hepato.weight', 'hepato.color', 'proteins', 'comment', 'egg.comment')
+x <- x[vars]
+
 # Compile study table:
-vars <- c("year", "month", "day", "project", "location", "gear", 'vessel') 
-res <- aggregate(x["tow.number"], by = x[vars], unique)
+vars <- c("year", "month", "day", "project", "location", "gear", "vessel", "preservation") 
+x[c("longitude", "latitude")] <- round(x[c("longitude", "latitude")], 2)
+res <- aggregate(x[c("longitude", "latitude", "tow.number")], by = x[vars], unique)
+res <- res[order(date(res)), ]
+rownames(res) <- NULL
 
 write.csv(x, file = "data/biological.csv", row.names = FALSE)
 write.csv(r, file = "data/colorimeter.csv", row.names = FALSE)
-write.csv(res, file = "data/sites.csv", row.names = FALSE)
+#write.csv(res, file = "data/sites.csv", row.names = FALSE)
 
 # Compile site table:
