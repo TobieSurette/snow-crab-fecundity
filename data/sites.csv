@@ -1,162 +1,162 @@
-""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+"year","month","day","project","location","gear","vessel","preservation","female.number","longitude","latitude"
+1989,5,2,"","","","","",2,NA,NA
+1989,5,3,"","","","","",15,NA,NA
+1989,6,3,"","","","","",18,NA,NA
+1989,6,4,"","","","","",15,NA,NA
+1989,8,2,"","","","","",56,NA,NA
+1989,8,3,"","","","","",83,NA,NA
+1989,8,4,"","","","","",39,NA,NA
+1989,9,3,"","","","","",67,NA,NA
+1989,9,4,"","","","","",26,NA,NA
+1989,10,2,"","","","","",44,NA,NA
+1989,11,3,"","","","","",19,NA,NA
+1990,5,3,"","","","","",44,NA,NA
+1990,6,3,"","","","","",94,NA,NA
+1990,7,3,"","","","","",38,NA,NA
+1990,8,3,"","","","","",39,NA,NA
+1990,9,3,"","","","","",88,NA,NA
+1990,10,3,"","","","","",87,NA,NA
+1990,11,3,"","","","","",28,NA,NA
+1991,5,3,"","","","","",6,NA,NA
+1991,6,3,"","","","","",34,NA,NA
+1991,8,3,"","","","","",63,NA,NA
+1991,9,10,"","22","","","",32,NA,NA
+1991,9,10,"","25","","","",21,NA,NA
+1991,10,3,"","","","","",29,NA,NA
+1991,11,3,"","","","","",17,NA,NA
+1992,7,3,"","","","","",50,NA,NA
+1992,8,3,"","","","","",22,NA,NA
+1992,9,3,"","","","","",44,NA,NA
+1992,10,3,"","","","","",33,NA,NA
+1992,11,3,"","","","","",3,NA,NA
+1998,7,15,"","","","","",117,NA,NA
+1998,7,20,"","","","","",119,NA,NA
+1998,7,29,"","","","","",43,NA,NA
+1998,8,13,"","","","","",38,NA,NA
+1999,3,1,"","","","","",213,NA,NA
+2001,8,27,"","","","","",64,NA,NA
+2001,9,1,"","","","","",245,NA,NA
+2001,9,13,"","","","","",231,NA,NA
+2001,9,27,"","","","Den C. Martin","",83,NA,NA
+2001,9,28,"","","","Den C. Martin","",47,NA,NA
+2001,11,1,"","","","","",70,NA,NA
+2001,11,20,"","","","","",75,NA,NA
+2002,6,6,"","","","Marco-Michel","",110,NA,NA
+2002,8,13,"","1","","Den C. Martin","",151,NA,NA
+2002,8,13,"","2","","Den C. Martin","",12,NA,NA
+2002,8,13,"","3","","Den C. Martin","",6,NA,NA
+2002,8,13,"","4","","Den C. Martin","",3,NA,NA
+2002,11,2,"","1","","CCGS Opilio","",9,NA,NA
+2002,11,2,"","2","","CCGS Opilio","",10,NA,NA
+2002,11,2,"","4","","CCGS Opilio","",19,NA,NA
+2002,11,21,"","Baie des Chaleurs 1","","CCGS Opilio","",72,NA,NA
+2002,11,21,"","Baie des Chaleurs 2","","CCGS Opilio","",74,NA,NA
+2003,8,19,"Fecondite (Francois)","","","Marco-Michel","",2,-61.8169277777778,45.4917175200617
+2003,8,19,"Fecondite (Francois)","","","Marco-Michel","formaldehyde",39,-61.8169277777778,45.4917175200617
+2003,8,26,"Fecondite (Francois)","","trawl","","frozen",36,NA,NA
+2003,8,27,"Fecondite (Francois)","","trawl","","frozen",49,NA,NA
+2003,8,29,"Fecondite (Francois)","","trawl","","frozen",79,NA,NA
+2003,8,30,"Fecondite (Francois)","","trawl","","frozen",16,NA,NA
+2003,9,2,"Fecondite (Francois)","","","Marco-Michel","",1,-64.2169308333333,46.2010508525463
+2003,9,2,"Fecondite (Francois)","","","Marco-Michel","formaldehyde",305,-64.2139772322404,46.2049205254501
+2003,9,2,"Fecondite (Francois)","","trawl","","frozen",50,NA,NA
+2003,9,16,"Fecondite (Francois)","","trawl","","frozen",100,NA,NA
+2003,9,30,"Fecondite (Francois)","","","Marco-Michel","formaldehyde",217,-61.13605562468,45.3513549359056
+2003,10,1,"Fecondite (Francois)","","","Marco-Michel","formaldehyde",101,NA,NA
+2003,11,4,"Fecondite (Francois)","","","CCGS Opilio","",1,-64.2167,46.2174398055555
+2003,11,4,"Fecondite (Francois)","","","CCGS Opilio","formaldehyde",479,-64.2167,46.2174398055555
+2004,7,22,"Fecondite (Francois)","","trawl","","frozen",36,NA,NA
+2004,8,2,"Fecondite (Francois)","","trawl","","frozen",25,NA,NA
+2004,8,12,"Fecondite (Francois)","","trawl","","frozen",49,NA,NA
+2004,8,16,"Fecondite (Francois)","","trawl","","frozen",18,NA,NA
+2004,8,17,"Fecondite (Francois)","","trawl","","frozen",50,NA,NA
+2004,8,18,"Fecondite (Francois)","","trawl","","frozen",25,NA,NA
+2004,8,19,"Fecondite (Francois)","","trawl","","frozen",28,NA,NA
+2004,8,29,"Fecondite (Francois)","","trawl","","frozen",68,NA,NA
+2004,8,30,"Fecondite (Francois)","","","","formaldehyde",80,NA,NA
+2004,10,27,"Fecondite (Francois)","","","Marco-Michel","formaldehyde",102,NA,NA
+2005,7,23,"Survey","","trawl","Marco-Michel","formaldehyde",10,-63.0168486111111,46.512773097608
+2005,7,24,"Survey","","trawl","Marco-Michel","formaldehyde",22,-64.4517082323232,46.9527028083193
+2005,7,28,"Survey","","trawl","Marco-Michel","formaldehyde",15,-63.4578907222222,46.7437802155401
+2005,7,29,"Survey","","trawl","Marco-Michel","formaldehyde",52,-62.5414473023504,46.6111209654929
+2005,7,30,"Survey","","trawl","Marco-Michel","formaldehyde",8,-62.2209071527778,46.3163275257909
+2005,7,31,"Survey","","trawl","Marco-Michel","formaldehyde",15,-63.7646104074074,46.5092876082202
+2005,8,1,"Survey","","trawl","Marco-Michel","formaldehyde",18,-63.617690154321,46.0600907650806
+2005,8,9,"Survey","","trawl","Marco-Michel","formaldehyde",9,-61.9797190740741,45.5408389669239
+2005,8,11,"Survey","","trawl","Marco-Michel","formaldehyde",16,-63.9240056597222,47.3024169428723
+2005,8,12,"Survey","","trawl","Marco-Michel","formaldehyde",1,-65.5668033333333,46.5612314435185
+2005,8,13,"Survey","","trawl","Marco-Michel","formaldehyde",23,-65.291423321256,46.5902692906233
+2005,8,26,"Survey","","trawl","Marco-Michel","formaldehyde",1,-62.8000875,46.1031110868056
+2005,8,27,"Survey","","trawl","Marco-Michel","formaldehyde",17,-64.1393300163399,46.4189482253223
+2005,8,28,"Survey","","trawl","Marco-Michel","formaldehyde",28,-64.1478019047619,46.20750854709
+2005,8,30,"Survey","","trawl","Marco-Michel","formaldehyde",1,-63.2669377777778,46.2177036283951
+2005,9,14,"Survey","","trawl","Marco-Michel","formaldehyde",24,-61.2855022569444,45.3047586567805
+2005,9,15,"Survey","","trawl","Marco-Michel","formaldehyde",27,-61.045131409465,45.4342672988883
+2005,9,17,"Survey","","trawl","Marco-Michel","formaldehyde",8,-61.1542799652778,45.6830127000096
+2005,9,18,"Survey","","trawl","Marco-Michel","formaldehyde",4,-61.1542659027778,45.4550265928048
+2005,9,19,"Survey","","trawl","Marco-Michel","formaldehyde",4,-61.4542547222222,45.2418877070216
+2005,9,20,"Survey","","trawl","Marco-Michel","formaldehyde",3,-61.4556635185185,45.1094104638374
+2006,5,31,"Survey","","trawl","Marco-Michel","frozen",61,-61.2760586794171,45.5125553753213
+2006,6,1,"Survey","","trawl","Marco-Michel","frozen",6,-60.4833641666667,45.7431990655093
+2006,6,2,"","","trawl","Marco-Michel","frozen",31,-60.8833972222222,45.8250323896605
+2006,6,5,"","","trawl","Marco-Michel","frozen",17,-60.8833972222222,45.8250323896605
+2006,6,6,"","","trawl","Marco-Michel","formaldehyde",28,NA,NA
+2006,8,17,"","","trawl","Marco-Michel","formaldehyde",142,NA,NA
+2006,8,30,"","","trawl","Marco-Michel","formaldehyde",129,NA,NA
+2006,9,13,"","","trawl","Marco-Michel","formaldehyde",3,NA,NA
+2006,9,13,"","GP004","trawl","Marco-Michel","formaldehyde",3,NA,NA
+2006,9,13,"","GP005","trawl","Marco-Michel","formaldehyde",2,NA,NA
+2006,9,13,"","GP035","trawl","Marco-Michel","formaldehyde",1,NA,NA
+2006,9,13,"","GP079","trawl","Marco-Michel","formaldehyde",2,NA,NA
+2006,9,13,"","GP149","trawl","Marco-Michel","formaldehyde",1,NA,NA
+2006,9,13,"","GP350","trawl","Marco-Michel","formaldehyde",1,NA,NA
+2007,6,13,"June survey","","trawl","Marco-Michel","formaldehyde",40,NA,NA
+2007,6,18,"","","trawl","Marco-Michel","formaldehyde",69,NA,NA
+2007,6,20,"","","trawl","CCGS Opilio","formaldehyde",18,NA,NA
+2007,8,1,"Survey","Bradelle Bank","trawl","Marco-Michel","formaldehyde",100,NA,NA
+2007,8,8,"Survey","Bradelle Bank","trawl","Marco-Michel","formaldehyde",80,NA,NA
+2007,8,12,"Survey","Bradelle Bank","trawl","Marco-Michel","formaldehyde",45,NA,NA
+2007,8,27,"Survey","Bradelle Bank","trawl","Marco-Michel","formaldehyde",85,NA,NA
+2007,9,23,"Survey","","trawl","Marco-Michel","formaldehyde",85,NA,NA
+2008,6,25,"June survey","","trawl","Marco-Michel","formaldehyde",86,NA,NA
+2008,7,18,"Survey","","trawl","Marco-Michel","formaldehyde",100,NA,NA
+2008,7,29,"Survey","","trawl","Marco-Michel","formaldehyde",70,NA,NA
+2008,8,29,"Survey","","trawl","Marco-Michel","formaldehyde",91,NA,NA
+2008,9,15,"Survey","Buffer Zone","trawl","Marco-Michel","formaldehyde",75,NA,NA
+2008,9,19,"Survey","Bradelle Bank","trawl","Marco-Michel","formaldehyde",92,NA,NA
+2008,9,23,"Fall survey","","trawl","Marco-Michel","formaldehyde",119,NA,NA
+2009,6,15,"June survey","","trawl","Marco-Michel","formaldehyde",162,NA,NA
+2009,8,18,"Survey","Bradelle Bank North","trawl","Marco-Michel","formaldehyde",130,NA,NA
+2009,8,31,"Survey","Baie des Chaleurs","trawl","Marco-Michel","formaldehyde",127,NA,NA
+2009,9,20,"Survey","Baie des Chaleurs","trawl","Marco-Michel","formaldehyde",117,NA,NA
+2009,9,29,"Survey","","trawl","Marco-Michel","formaldehyde",108,NA,NA
+2010,7,26,"Survey","Bradelle Bank","trawl","Marco-Michel","formaldehyde",53,NA,NA
+2010,8,12,"Survey","Bradelle Bank","trawl","Marco-Michel","formaldehyde",163,NA,NA
+2010,8,19,"Survey","Baie des Chaleurs","trawl","Marco-Michel","formaldehyde",166,NA,NA
+2010,8,25,"Survey","Bradelle Bank","trawl","Marco-Michel","formaldehyde",196,NA,NA
+2010,9,9,"Survey","","trawl","Marco-Michel","formaldehyde",98,NA,NA
+2010,9,15,"Survey","","trawl","Marco-Michel","formaldehyde",104,NA,NA
+2012,5,24,"OERA","Grande Riviere","trap","CCGS Opilio","formaldehyde",21,-64.4333852777778,46.8126573929784
+2012,5,30,"OERA","Cheticamp","trap","CCGS Opilio","formaldehyde",20,-61.2501508333333,45.5246527358796
+2012,6,1,"OERA","Margaree","trap","CCGS Opilio","formaldehyde",20,-61.3002622222222,45.1640832604938
+2012,6,4,"OERA","Louisbourg","trap","CCGS Opilio","formaldehyde",4,-59.8833361111111,44.5200324066358
+2012,6,14,"OERA","Louisbourg","trap","Britanny Maddison","formaldehyde",20,-59.8001055555556,44.5036666373457
+2012,9,18,"OERA","Louisbourg","trap","Britanny Maddison","formaldehyde",20,-59.8334416666667,44.5364351550926
+2012,9,22,"OERA","Grande Riviere","trap","CCGS Opilio","formaldehyde",21,-64.4168263888889,46.8782175482253
+2012,11,3,"OERA","Margaree","trap","Fishfull Thinking","formaldehyde",20,-61.5167452777778,45.1476342374228
+2012,11,4,"OERA","Cheticamp","trap","Fishfull Thinking","formaldehyde",20,-61.3000155555556,45.508249995679
+2012,11,19,"OERA","Margaree","cage","Fishfull Thinking","formaldehyde",20,-61.3336063888889,45.213240664892
+2012,11,20,"OERA","Cheticamp","cage","Fishfull Thinking","formaldehyde",20,-61.1002658333333,45.4591388150463
+2013,5,30,"OERA","Grande Riviere","trap","CCGS Perley","formaldehyde",20,-64.4168263888889,46.8782175482253
+2013,6,4,"OERA","Margaree","cage","Fishfull Thinking","formaldehyde",20,-61.3500516666667,45.2132360967593
+2013,6,11,"OERA","Cheticamp","cage","Fishfull Thinking","formaldehyde",20,-61.1333647222222,45.4591296209105
+2013,6,12,"OERA","Cheticamp","trap","Fishfull Thinking","formaldehyde",20,-61.1333647222222,45.4591296209105
+2013,6,18,"OERA","Margaree","trap","Fishfull Thinking","formaldehyde",20,-61.3000955555556,45.180472195679
+2013,6,24,"OERA","Louisbourg","trap","Britanny Maddison","formaldehyde",5,-59.8334916666667,44.5200462523148
+2013,10,15,"OERA","Cheticamp","cage","Fishfull Thinking","formaldehyde",16,-61.1500538888889,45.442736096142
+2013,10,16,"OERA","Cheticamp","trap","Fishfull Thinking","formaldehyde",20,-61.1333647222222,45.4591296209105
+2013,10,22,"OERA","Margaree","cage","Fishfull Thinking","formaldehyde",17,-61.35007,45.2132360916667
+2013,11,6,"OERA","Margaree","trap","Fishfull Thinking","formaldehyde",20,-61.3002622222222,45.1640832604938
+2017,6,3,"Female Sampling","Baie-des-Chaleurs","trap","CCGS Perley","formaldehyde",70,-64.9669019444444,46.6813980827932
+2017,6,16,"Female Sampling","Bradelle Bank","trap","CCGS Perley","formaldehyde",72,-63.1667916666667,45.955509224537
+2017,8,16,"Female Sampling","Cheticamp","trap","CCGS Perley","formaldehyde",71,-61.3500633055556,45.4262916490818

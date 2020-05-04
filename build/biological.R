@@ -399,18 +399,11 @@ x <- x[vars]
 
 # Compile study table:
 vars <- c("year", "month", "day", "project", "location", "gear", "vessel", "preservation") 
-x[c("longitude", "latitude")] <- round(x[c("longitude", "latitude")], 2)
-res <- aggregate(x[c("longitude", "latitude", "tow.number")], by = x[vars], length)
+res <- aggregate(list(female.number = x$longitude), by = x[vars], length)
+res <- cbind(res, aggregate(x[c("longitude", "latitude")], by = x[vars], mean, na.rm = TRUE)[c("longitude", "latitude")])
 res <- res[order(date(res)), ]
 rownames(res) <- NULL
 
-res$tow.number <- unlist(lapply(res$tow.number, paste, collapse = ","))
-res <- res[, -which(names(res) %in% c("latitude", "longitude"))]
-
 write.csv(x, file = "data/biological.csv", row.names = FALSE)
 write.csv(r, file = "data/colorimeter.csv", row.names = FALSE)
-#write.csv(res, file = "data/sites.csv", row.names = FALSE)
-
-
-
-
+write.csv(res, file = "data/sites.csv", row.names = FALSE)
