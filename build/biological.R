@@ -122,8 +122,6 @@ x$egg.comment <- gsub(" $", "", x$egg.comment)
 index <- which(x$eggs.dropped != "")
 x$egg.comment[index] <- x$eggs.dropped[index]
 
-
-
 # Update parasite field:
 index <- grep("parasite", tolower(x$egg.comment))
 x$parasite[index] <- "Parasite infested"
@@ -135,7 +133,7 @@ x$egg.total.weight <- as.numeric(x$egg.total.weight)
 
 # Latitude and longitude corrections:
 x$latitude <- gsub("48.02", "4802", x$latitude)
-x$latitude[x$latitude == "47\xf850.612"] <- "4750.612"
+x$latitude[x$latitude == "47ø50.612"] <- "4750.612"
 x$latitude <- as.numeric(x$latitude) 
 x$longitude <- as.numeric(substr(x$longitude, 1, 2)) + 
                as.numeric(substr(x$longitude, 3, 4)) / 60 + 
@@ -144,6 +142,19 @@ x$longitude <- -abs(x$longitude)
 x$latitude <- as.numeric(substr(x$latitude, 1, 2)) + 
                as.numeric(substr(x$latitude, 3, 4)) / 60 + 
                + (x$longitude - floor(x$latitude)) / 3600
+
+# Import coordinates:
+tmp <- data.frame(year       = 2006,
+                  tow.number = c(2, 4, 7, 5, 5, 6),
+                  location   = c("GP004", "GP005", "GP149", "GP035", "GP079", "GP350"),
+                  latitude   = c(47.90333, 47.90837, 47.73698, 46.7142, 46.88015, 46.7211),
+                  longitude  = c(-65.347, -65.2858, -64.0733, -61.935, -62.8897, -62.8805),
+                  stringsAsFactors = FALSE)
+index <- match(x[c("year", "location")], tmp[c("year", "location")])
+ii <- which(!is.na(index))
+x$tow.number[ii] <- tmp$tow.number[index[ii]]
+x$longitude[ii]  <- tmp$longitude[index[ii]]
+x$latitude[ii]   <- tmp$latitude[index[ii]]
 
 # Fix gonad colors (what a mess):
 x$gonad.color <- toupper(x$gonad.color)
@@ -211,6 +222,12 @@ x$location <- gsub("^;", "", x$location)
 x$location <- gsub("^GP ", "GP", x$location)
 x$location <- gsub("; ", "-", x$location)
 
+#index <- which(x$year == 2007 & x$month == 6 & x$day == 20)
+#x$gear[index] <- "beam trawl"
+#x$project[index] <- "Tagging"
+#index <- which(x$year == 2007 & x$month == 6 & x$day == 20)
+#18 et 20 juin 2007 : Marco Michel
+
 # Compile colorimeter data table:
 body.part <- c("gonad", "eggs", "hepato-pancreas")
 r <- NULL
@@ -232,6 +249,7 @@ x$gonad.weight[x$gonad.weight == "na"] <- ""
 x$gonad.weight[x$gonad.weight == "5..2726"] <- "5.2726"
 x$gonad.weight <- gsub("[*]", "", x$gonad.weight)
 x$gonad.weight <- as.numeric(x$gonad.weight)
+x$gonad.weight[which(x$gonad.weight > 30)] <- NA
 
 # Fix reproductive status:
 x$reproductive.status[x$reproductive.status == "M;"] <- "M"
@@ -294,11 +312,7 @@ x$gonad.visual[is.na(x$gonad.visual)] <- ""
 index <- which((x$gonad.color == "") & (x$gonad.visual != ""))
 x$gonad.color[index] <- x$gonad.visual[index]
 
-x$egg.visual <- toupper(c("white", "beige", "orange")[as.numeric(x$egg.visual)])
-x$gonad.visual[is.na(x$gonad.visual)] <- ""
-index <- which((x$gonad.color == "") & (x$gonad.visual != ""))
-x$gonad.color[index] <- x$gonad.visual[index]
-
+# Fix egg color:
 x$egg.visual <- toupper(c("light orange", "dark orange", "black", "cocoon")[as.numeric(x$egg.visual)])
 x$egg.visual[is.na(x$egg.visual)] <- ""
 index <- which((x$egg.color == "") & (x$egg.visual != ""))
@@ -310,9 +324,73 @@ x$egg.color[x$egg.color == "BROWN"] <- "BLACK"
 # Drop visual variables:
 x <- x[, -which(names(x) %in% c("egg.visual", "gonad.visual", "hepato.visual"))]
 
+# Correct egg sampole weight:
+x$egg.sample.weight <- as.numeric(x$egg.sample.weight)
+x$egg.sample.weight[which(x$egg.sample.weight == 0)] <- NA
+
+index <- which(x$egg.sample.weight == 1.4583)
+tmp <- x$egg.total.weight[index]
+x$egg.sample.weight[index] <- x$egg.total.weight[index]
+x$egg.total.weight[index] <- tmp
+x$egg.total.number[index] <- NA
+
+index <- which(x$egg.sample.weight > 0.1) 
+x$egg.sample.weight[index] <- NA
+x$egg.total.number[index] <- NA
+
+# Check 0 % eggs remaining:
+x$eggs.remaining[which(x$eggs.remaining == "0%" & (x$egg.total.weight > 0))] <- ""
+x$egg.total.weight[which(x$egg.sample.weight == x$egg.total.weight)] <- NA
+x$eggs.remaining[which(x$eggs.remaining == "5%" & (x$egg.total.weight > 0))] 
+
+# Egg total weight:
+x$egg.total.weight[which(x$egg.total.weight > 10)] <- NA
+
+# Correct comments:
+x$comment <- tolower(x$comment)
+x$comment <- gsub("sinile", "senile", x$comment)
+x$comment <- gsub("beoge", "beige", x$comment)
+x$comment <- gsub("gond", "gonade", x$comment)
+index <- setdiff(grep("gon", tolower(x$comment)), grep("gonad", tolower(x$comment)))
+x$comment[index] <- gsub("gon", "gonade", x$comment[index], fixed = TRUE)
+index <- setdiff(grep("gon", tolower(x$comment)), grep("gonad", tolower(x$comment)))
+x$comment[index] <- gsub("gon", "gonade", x$comment[index], fixed = TRUE)
+x$comment <- gsub("pts", "points", x$comment)
+x$comment <- gsub("petite_", "petite", x$comment)
+x$comment <- gsub("pt ", "point ", x$comment)
+x$comment <- gsub(" org", " orange", x$comment)
+x$comment <- gsub("org ", " orange ", x$comment)
+x$comment <- gsub("ptrouge", "points rouges", x$comment)
+x$comment <- gsub("pntrouge", "points rouges", x$comment)
+x$comment <- gsub("spermateques", "spermatheque", x$comment)
+x$comment <- gsub(" oc", " orange clair", x$comment)
+
+# Total number of eggs:
+index <- which((x$year == 2002) & (x$egg.sample.weight < 1E-4))
+x$egg.weight <- NA
+x$egg.weight[index] <- x$egg.sample.weight[index]
+x$egg.sample.number[index] <- 500
+x$egg.sample.weight[index] <- x$egg.sample.number[index] * x$egg.weight[index]
+
+# Length measurement precisions:
+x$carapace.width.precision <- NA
+x$carapace.width.precision[x$year == 1989] <- 0.5
+x$carapace.width.precision[x$year == 1990] <- 1
+x$carapace.width.precision[x$year %in% 1991:2001] <- 0.1
+x$carapace.width.precision[x$year > 2001] <- 0.01
+
+x$abdomen.width.precision <- NA
+x$abdomen.width.precision[x$year == 1989] <- 0.5
+x$abdomen.width.precision[x$year == 1990] <- 1
+x$abdomen.width.precision[x$year %in% 1991:2001] <- 0.1
+x$abdomen.width.precision[x$year > 2001] <- 0.01
+
+# Sperm corrections:
+x$sperm.points.noires <- gsub("[ ;.]", "", x$sperm.points.noires)
+
 # Re-order variables:
 vars <- c('year','month','day', 'project', 'zone', 'sector', 'location', 'station', 'tow.number', 'latitude', 'longitude', 'gear', 'vessel',
-          'preservation', 'crab.number', 'sex', 'carapace.width', 'abdomen.width', 'weight', 'shell.condition', 'reproductive.status', 'missing.legs',
+          'preservation', 'crab.number', 'sex', 'carapace.width', 'abdomen.width', 'carapace.width.precision', 'abdomen.width.precision', 'weight', 'shell.condition', 'reproductive.status', 'missing.legs',
           'egg.color', 'eggs.remaining', 'egg.sample.weight', 'egg.sample.number', 'egg.total.weight', 'egg.total.number', 'egg.development',
           'parasite', 'gonad.weight', 'gonad.color', 
           'spermatheca.weight', 'spermatheca.volume', 'sperm.square.count', 'sperm.sample.volume', 'sperm.sample.count', 'sperm.color', 'spermatheca.sperm', 
@@ -322,12 +400,17 @@ x <- x[vars]
 # Compile study table:
 vars <- c("year", "month", "day", "project", "location", "gear", "vessel", "preservation") 
 x[c("longitude", "latitude")] <- round(x[c("longitude", "latitude")], 2)
-res <- aggregate(x[c("longitude", "latitude", "tow.number")], by = x[vars], unique)
+res <- aggregate(x[c("longitude", "latitude", "tow.number")], by = x[vars], length)
 res <- res[order(date(res)), ]
 rownames(res) <- NULL
+
+res$tow.number <- unlist(lapply(res$tow.number, paste, collapse = ","))
+res <- res[, -which(names(res) %in% c("latitude", "longitude"))]
 
 write.csv(x, file = "data/biological.csv", row.names = FALSE)
 write.csv(r, file = "data/colorimeter.csv", row.names = FALSE)
 #write.csv(res, file = "data/sites.csv", row.names = FALSE)
 
-# Compile site table:
+
+
+
