@@ -398,12 +398,19 @@ vars <- c('year','month','day', 'project', 'zone', 'sector', 'location', 'statio
 x <- x[vars]
 
 # Compile study table:
-vars <- c("year", "month", "day", "project", "location", "gear", "vessel", "preservation") 
+vars <- c("year", "month", "day", "project", "zone", "location", "sector", "station", "gear", "vessel", "preservation") 
 res <- aggregate(list(female.number = x$longitude), by = x[vars], length)
 res <- cbind(res, aggregate(x[c("longitude", "latitude")], by = x[vars], mean, na.rm = TRUE)[c("longitude", "latitude")])
+res$tow.number <- unlist(lapply(aggregate(x["tow.number"], by = x[vars], function(x) unique(x[!is.na(x)]))[, "tow.number"], paste, collapse = ","))
 res <- res[order(date(res)), ]
 rownames(res) <- NULL
 
+# 'color' with 'colour' replace:
+names(x) <- gsub("color", "colour", names(x))
+names(r) <- gsub("color", "colour", names(r))
+names(res) <- gsub("color", "colour", names(res))
+
+# Output files:
 write.csv(x, file = "data/biological.csv", row.names = FALSE)
 write.csv(r, file = "data/colorimeter.csv", row.names = FALSE)
 write.csv(res, file = "data/sites.csv", row.names = FALSE)
