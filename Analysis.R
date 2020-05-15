@@ -5,11 +5,8 @@ library(rjags)
 # Read biological data:
 x <- read.csv("data/biological.csv", header = TRUE, stringsAsFactors = FALSE)
 
-
 index <- which((log(x$carapace.width) <= 4.2) & (log(x$carapace.width) > 4.1))
 gbarplot(table(round(log(x$gonad.weight[index])*10)/10), width = 0.1)
-
-
 
 # Define initial parameter vector:
 theta = c(intercept.primiparous = -6,
@@ -62,7 +59,12 @@ plot(log(x$carapace.width), log(x$gonad.weight),
 grid()
 mtext("ln(carapace width)", 1, 2.5, cex = 1.25)
 mtext("ln(gonad weight)", 2, 2.5, cex = 1.25)
-
+months <- 5:10
+for (i in 1:length(months)){
+   index <- x$month == months[i]
+   points(log(x$carapace.width)[index], log(x$gonad.weight)[index], 
+          pch = 21, cex = 1, bg = rainbow(length(months))[i])
+}
 
 plot(log(jitter(x$egg.sample.number, amount = 10)), 
      log(x$egg.sample.weight), cex = 0.25)
@@ -108,9 +110,4 @@ plot(plog(x$egg.total.number - n), pch = 21, cex = 0.25)
 plot(x$egg.total.number - n, pch = 21, cex = 0.25)
 
 index <- which(abs(x$egg.total.number - n) > 1000)
-
-plot()
-
-mat
-
 
