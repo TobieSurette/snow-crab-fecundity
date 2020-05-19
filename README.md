@@ -1,17 +1,23 @@
-# snow-crab-fecundity
- Snow crab fecundity data and programs
+# Snow Crab Fecundity
+Snow crab fecundity data and programs
 
-## 1986-1988 Sampling Protocol
+## Sampling Protocol (1986-1988)
 
-* From four geographic locations
+* From four geographic locations:
   - Baie-des-Chaleurs
   - Bradelle Bank
   - Prince Edward Island
   - Cape Breton
   
-* Fishing gear used was 5-meter beam trawl, 20-meter Nephrops trawl and conventional snow crab traps (square?)
-* Between April 1986 and June 1988, 11 samples totaling 698 females were collected. The widths of the carapace and of the 5th segment of the abdomen were measured to the nearest millimeter. The position and number of missing legs, carapace rigidity (soft, medium and hard), degree of coverage of the carapace by epibionts (old, medium and new), and the colour of the eggs (orange, dark orange, brown and black) were recorded as indices of, respectively: ability to groom the eggs during incubation, time elapsed since the last moult, and time elapsed since spawning.
+* Three different fishing gears were used:
+  - 5-meter beam trawl
+  - 20-meter Bigouden Nephrops trawl
+  - Conventional snow crab traps (square?)
+  
+* Between April 1986 and June 1988, in the Baie-des-Chaleurs, Bradelle Bank and Prince Edward Island locations, 11 samples totaling 698 females were collected. The widths of each carapace and 5th segment of the abdomen were measured to the nearest millimeter. The position and number of missing legs, carapace rigidity (soft, medium and hard), degree of coverage of the carapace by epibionts (old, medium and new), and the colour of the eggs (orange, dark orange, brown and black) were recorded as possible indices of, respectively: ability to groom the eggs during incubation, time elapsed since the last moult, and time elapsed since spawning. Females with abnormally small clutch sizes, unfertilized eggs or hatching eggs were not used. 
 
-The females with abnormally low clutch size, unfertilized eggs and hatching were not used. The spawning category (primiparous and multiparous) was identified by carapace cleanliness and presence/absence of male grasping marks on the legs. Females which spawn for the first time mate shortly after their terminal moult leading to maturity and are called primiparous, they usually bear no mating grasping marks. Females who mated and spawned several times after the terminal moult, while being in hard shell are said to be multiparous, and usually bear mating and grasping marks.
+* Primiparous females (i.e. first-time spawners) were identified by their softer, cleaner carapaces with few or no visible mating grasping marks. Multiparous females (i.e. multiple spawners) had harder, dirtier carapaces and bore multiple mating and grasping marks.
 
-The abdomens bearing external eggs were preserved in 40% formalin solution, and the pleopods with attached egg massses were later removed using scissors and dried at 60C for 24 hrs. The dried eggs were separated from. pleopods and weighed to the nearest 0.1 mg. A subsample of eggs was also weighed, and its eggs were counted. The fecundity defined here as the number of eggs per brood, was caluclated by extrapolation.
+## Egg sample preparation and measurement (1986-1992)
+
+In the laboratory, abdomens bearing external eggs were removed and preserved in a 40% formalin solution. Pleopods with attached egg clutches were later separated using scissors and dried at 60C for 24 hours. The dried eggs were separated from pleopods and weighed to the nearest 0.1 mg. For each female, the average egg dry weight was calculated from a weighed and counted subsample of eggs, which was then used to calculate the fecundity, defined here as the total number of eggs per brood.
