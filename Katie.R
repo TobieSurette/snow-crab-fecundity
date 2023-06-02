@@ -5,12 +5,12 @@ library(gulf.spatial)
 
 #==================================== 1986-1988 data =======================================
 files <- dir(path = "data/raw")
-files <- files[-grep("1989-2017", files)]
-files <- files[-grep("Colormeter", files)]
+#files <- files[-grep("1989-2017", files)]
+#files <- files[-grep("Colormeter", files)]
 
 res <- NULL
 for (i in 1:length(files)){
-   x <- read.csv(paste0("data/", files[i]), header = TRUE, stringsAsFactors = FALSE, fileEncoding = "Windows-1252")
+   x <- read.csv(paste0("data/raw/", files[i]), header = TRUE, stringsAsFactors = FALSE, fileEncoding = "Windows-1252")
    
    str <- names(x)
    str <- gsub("boat", "vessel", str)
@@ -122,4 +122,54 @@ res$fecundity[is.na(res$fecundity)] <- f[is.na(res$fecundity)]
 
 y <- res
 
+# Eggs remaining:
+y$eggs.remaining[y$eggs.remaining == "*"] <- ""
+y$eggs.remaining[y$eggs.remaining %in% c("none", "NONE")] <- "0"
+y$eggs.remaining <- gsub("100+", "100", y$eggs.remaining, fixed = TRUE)
+ix <- grep("[%]", y$eggs.remaining)
+y$eggs.remaining[ix] <- gsub("[()]", "", unlist(lapply(strsplit(y$eggs.remaining[ix], " "), function(x) x[2])))
+ix <- which(as.numeric(y$eggs.remaining) >= 5)
+y$eggs.remaining[ix] <- paste0(y$eggs.remaining[ix], "%")
+y$eggs.remaining[which(y$eggs.remaining == "4+")] <- "4"
+y$eggs.remaining[which(y$eggs.remaining == "<26")] <- "1"
+ix <- which(y$eggs.remaining %in% 0:4)
+y$eggs.remaining[ix] <- gsub(" ", "", eggs.remaining(as.numeric(y$eggs.remaining[ix])))
+y$eggs.remaining[which(y$eggs.remaining == "Absent(noeggs)")] <- "0%"  
+
+# Abdomen width corrections:
+y$abdomen.width[which(y$abdomen.width > 90)] <- NA
+y$abdomen.width[which(y$abdomen.width > (6 + 0.7 * y$carapace.width))] <- NA
+y$abdomen.width[which(y$abdomen.width < (-17 + 0.7 * y$carapace.width))] <- NA
+
+# Sample egg count:
+y$egg.count.sample <- as.numeric(y$egg.sample.count)
+ix <- !is.na(as.numeric(y$sample.egg.count))
+y$egg.count.sample[ix] <- as.numeric(y$sample.egg.count[ix])
+y$egg.count.sample <- round(y$egg.count.sample)
+y$egg.count.sample
+y$egg.count.sample[y$egg.count.sample < 50] <- NA
+
+# Sample egg weight:
+y$egg.weight.sample <- as.numeric(y$egg.sample.weight) / 10000 
+ix <- !is.na(as.numeric(y$sample.egg.weight))
+y$egg.weight.sample[ix] <- as.numeric(y$sample.egg.weight[ix])
+y$egg.weight.sample[(y$egg.weight.sample < 0.01) | (y$egg.weight.sample > 0.1)] <- NA
+
+# Egg total weight:
+y$egg.total.weight <- as.numeric(y$total.egg.weight)
+
+# Fecundity: 
+ix <- which(is.na(y$fecundity))
+y$fecundity[ix] <- round(as.numeric(y$total.egg.count[ix]))
+y$fecundity[y$fecundity <= 100] <- NA
+
+# Carapace width:
+y$carapace.width[y$carapace.width > 95] <- NA
+y$carapace.width.precision <- 0.1
+y$carapace.width.precision[which(y$year <= 1988)] <- 1
+
+# Remove:
+remove <- c("egg.sample.count", "sample.egg.count", "egg.sample.weight", "sample.egg.weight", "total.egg.weight", "total.egg.count")
+y <- y[, -which(names(y) %in% remove)]
+   
 #==================================== End 1986-1988 data =======================================
