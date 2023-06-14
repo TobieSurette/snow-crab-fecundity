@@ -6,7 +6,7 @@ library(gulf.spatial)
 #========================================== 1986-1988 data ==============================================
 files <- dir(path = "data/raw", full.names = TRUE)
 files <- files[-grep("1989-2017", files)]
-files <- files[-grep("Colormeter", files)]
+#files <- files[-grep("Colormeter", files)]
 
 res <- NULL
 for (i in 1:length(files)){
