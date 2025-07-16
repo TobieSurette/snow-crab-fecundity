@@ -504,6 +504,7 @@ x$spermatheca.volume[x$spermatheca.volume > 10] <- NA
 # Gear:
 x$gear <- tolower(x$gear)
 x$gear[x$gear == "traps"] <- "trap"
+x$gear[is.na(x$gear)] <- ""
 
 # Clean-up:
 remove <- c('eggs.valid', "lat", "long", 'missing.legs.left', 'missing.legs.right', "condition", "total.egg.weight", 
@@ -530,7 +531,7 @@ x <- x[which(x$carapace.width >= 40 & x$carapace.width <= 95), ]
 
 # Determine valid fecundity:
 x$valid.fecundity <- 1
-terms <- c("worm", "vers", "parasite", "empty", "damage", "deformed", "déformés", "brisé", "cassé",
+terms <- c("worm", "vers", "parasite", "empty", "damage", "deformed", "déformés", "endommag", "brise", "brisé", "cassé",
            "nécros[ée]", "pleopod[e]* missing", "hyas", "capsules", "coc", "popped", "drop", "oeuf perdu",
            "échappé", "echappe", "egg[ a-z]*abnormal", "not grinded well enough to count", "pourrit") 
 for (i in 1:length(terms)){
@@ -539,6 +540,7 @@ for (i in 1:length(terms)){
 }
 x <- x[x$valid.fecundity == 1, ]
 x <- x[x$fecundity >= 5000, ]
+x <- x[which(x$gear != "cage"), ]
 
 # Fill-in 2003 and 2004 with missing shell conditions:
 ix <- which(is.na(x$shell.condition))
@@ -571,5 +573,5 @@ x$shell.condition[ix] <- 3
 #x$shell.condition[ix] <- 3
 
 # Output:
-#write.csv(x, file = "data/fecundity.csv", row.names = FALSE)
+write.csv(x, file = "data/fecundity.csv", row.names = FALSE)
 

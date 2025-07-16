@@ -4,25 +4,29 @@ library(gulf.spatial)
 options(max.print = 15000)
 
 # Identify primparous and multiparous:
+#x$maturity <- NA
+#x$maturity[x$shell.condition %in% 1:2] <- 1
+#x$maturity[x$shell.condition %in% 4:5] <- 2
+
+#x$eggs.remaining <- as.numeric(x$eggs.remaining)
+x$yearf <- x$year - min(x$year) + 1
+site.year <- unique(paste0(x$year, "-", month.abb[x$month], "-", x$location))
+x$site  <- match(paste0(x$year, "-", month.abb[x$month], "-", x$location), site.year)
 x$maturity <- NA
 x$maturity[x$shell.condition %in% 1:2] <- 1
 x$maturity[x$shell.condition %in% 4:5] <- 2
 
-#x$eggs.remaining <- as.numeric(x$eggs.remaining)
-x$yearf <- x$year - min(x$year) + 1
-site.year <- unique(paste(x$year, x$location))
-x$site  <- match(paste(x$year, x$location), unique(paste(x$year, x$location)))
-
 clc()
 paste0("n = ", nrow(x), ",")
+paste0("n.site = ", max(x$site), ",")
 paste0("x = c(", paste(round(x$carapace.width,1), collapse = ","), "),")
 paste0("f = c(", paste(round(x$fecundity), collapse = ","), "),")
 paste0("year = ", max(x$yearf), ",")
-paste0("log.f = c(", paste(round(log(x$fecundity),3), collapse = ","), "),")
+#paste0("log.f = c(", paste(round(log(x$fecundity),3), collapse = ","), "),")
 paste0("M = c(", paste(x$maturity, collapse = ","), "),")
 paste0("SC = c(", paste(x$shell.condition, collapse = ","), "),")
-paste0("SC45 = c(", paste((x$shell.condition %in% 4:5) + 1 - 1, collapse = ","), "),")
-paste0("year = c(", paste(x$yearf, collapse = ","), "),")
+#paste0("SC45 = c(", paste((x$shell.condition %in% 4:5) + 1 - 1, collapse = ","), "),")
+#paste0("year = c(", paste(x$yearf, collapse = ","), "),")
 paste0("site = c(", paste(x$site, collapse = ","), "),")
 
 clc()
@@ -31,7 +35,6 @@ lm(log(y$gonad.weight) ~ log(y$carapace.width))
 paste(round(y$carapace.width[ix],1), collapse = ",")
 paste(y$gonad.weight[ix], collapse = ",")
 paste(round(log(y$gonad.weight),3), collapse = ",")
-
 
 ix <- which(x$site == 31)
 plot(log(x$carapace.width[ix]), log(x$fecundity[ix]), cex = 0.74)

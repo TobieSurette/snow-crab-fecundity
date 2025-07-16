@@ -164,10 +164,10 @@ lines(t, 0.5394 * t^2.7295, lwd = 2, col = "blue")
 t <- 40:70
 lines(t, 0.4905 * t^2.7206, lwd = 2)  # SBS (Haynes 1976):
 t <- 40:63
-lines(t, 0.0249 * t^3.4822, lwd = 2)  # Chukchi:
+lines(t, 0.8*0.0249 * t^3.4822, lwd = 2)  # Chukchi:
 
 # Kolts (2015) SBS:
-t <- 40:80
+t <- 40:68
 lines(t, 0.0292 * t^3.4026, lwd = 2, col = "red") #NBS
 
 # Kon & Adachi (2006)
@@ -220,11 +220,40 @@ lines(t, 13.2530 * t^1.9922, lwd = 2)   # Anticosti
 t <- 50:90
 lines(t, exp(2.9486 * log(t) -1.3224), lwd = 2) 
 
+# Conan - sGSL (1989):
+t <- 40:80
+lines(t, exp(0.0350 + 2.5532 * log(t)), lwd = 2) # Primiparous.
+lines(t, exp(0.3044 + 2.4894 * log(t)), lwd = 2) # Multiparous.
+
 box(col = "grey50")
 #dev.off()
 
 
-
+# Size-frequency histogram by shell condition:
+t <- table(x$location, round(x$carapace.width))
+rownames(t)[rownames(t) == ""] <- "other"
+sites <- c("Baie des Chaleurs", "Shediac Valley", "Bradelle Bank", "PEI", "Cape Breton", "other")
+t <- t[sites, ]
+library("RColorBrewer")
+#display.brewer.all()         
+cols <- brewer.pal(n = nrow(t), name = "RdYlGn")
+png(file = "figures/Size-frequency by site.png", units = "in", width = 7, height = 7, res = 500)
+plot(c(40, 90), c(0, 160), type = "n", xlab = "", ylab = "", xaxs = "i", yaxs = "i")
+grid()
+col <-brewer.pal(n = nrow(t), name = "RdYlGn")
+lty <- c("solid", "dashed", "dotted", "dotdash", "longdash", "twodash")
+for (i in 1:nrow(t)){
+   lines(as.numeric(colnames(t)), t[i, ], col = fade(col[i], 1), lwd = 2, lty = lty[i])
+}
+mtext("Carapace width (mm)", 1, 2.5, cex = 1.25, font = 2)
+mtext("Frequency", 2, 2.5, cex = 1.25, font = 2)
+legend("topleft", 
+       box.lwd = 0.5, box.col = NA,
+       legend = paste0(sites, " (n = ", apply(t, 1, sum), ")"),
+       lwd = 2, bg = NA, cex = 0.9,
+       col = col, lty = lty)
+box(col = "grey50")
+dev.off()
 
 ix <- which((x$egg.colour == "light orange") & (x$shell.condition %in% 4:5))
 ix <- which((x$egg.colour == "dark orange") & (x$shell.condition %in% 4:5))
